@@ -28,7 +28,7 @@ app.use("/auth", authRoutes);
 //allow cross origin requests
 app.use(
   cors({
-    origin: "http://ilikelists.com.s3-website.us-east-2.amazonaws.com/",
+    origin: "http://ilikelists.com.s3-website.us-east-2.amazonaws.com",
     credentials: true
   })
 );
@@ -40,7 +40,7 @@ mongoose.connection.once("open", () => {
 
 const authCheck = (req, res, next) => {
   if (!req.user) {
-    res.redirect("http://ilikelists.com.s3-website.us-east-2.amazonaws.com/");
+    res.redirect("http://ilikelists.com.s3-website.us-east-2.amazonaws.com");
   } else {
     next();
   }

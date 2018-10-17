@@ -1,5 +1,4 @@
 const graphql = require("graphql");
-const _ = require("lodash");
 const { GraphQLDate } = require("graphql-iso-date");
 const Book = require("../models/book");
 const Author = require("../models/author");
