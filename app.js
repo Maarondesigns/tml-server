@@ -55,6 +55,6 @@ app.use(
   })
 );
 
-app.listen(4000, () => {
+app.listen(process.env.PORT, () => {
   console.log("Now listening for requests on port 4000");
 });
