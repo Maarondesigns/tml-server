@@ -12,7 +12,7 @@ router.get(
 //callback route for google to redirect to
 router.get("/google/redirect", passport.authenticate("google"), (req, res) => {
   // res.send(req.user);
-  res.redirect("http://ilikelists.com.s3-website.us-east-2.amazonaws.com");
+  res.redirect("https://ilikelists.com.s3-website.us-east-2.amazonaws.com");
 });
 
 //facebook login
@@ -23,7 +23,7 @@ router.get(
   "/facebook/redirect",
   passport.authenticate("facebook"),
   (req, res) => {
-    res.redirect("http://ilikelists.com.s3-website.us-east-2.amazonaws.com");
+    res.redirect("https://ilikelists.com.s3-website.us-east-2.amazonaws.com");
   }
 );
 
@@ -31,7 +31,7 @@ router.get(
 router.get("/logout", (req, res) => {
   //handle with passport
   req.logout();
-  res.redirect("http://ilikelists.com.s3-website.us-east-2.amazonaws.com/");
+  res.redirect("https://ilikelists.com.s3-website.us-east-2.amazonaws.com/");
 });
 
 module.exports = router;
