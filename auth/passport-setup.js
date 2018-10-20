@@ -30,11 +30,16 @@ passport.use(
           let user = {};
           if (profile.displayName) user["username"] = profile.displayName;
           if (profile.id) user["facebookId"] = profile.id;
-          if (profile.emails[0].value) user["email"] = profile.emails[0].value;
-          if (profile.photos[0].value) user["avatar"] = profile.photos[0].value;
-          new User(user).save().then(newUser => {
-            done(null, newUser);
-          });
+          if (profile.emails) user["email"] = profile.emails[0].value;
+          if (profile.photos) user["avatar"] = profile.photos[0].value;
+          new User(user)
+            .save()
+            .then(newUser => {
+              done(null, newUser);
+            })
+            .catch(err => {
+              console.log(err, profile);
+            });
         }
       });
     }
@@ -58,11 +63,16 @@ passport.use(
           let user = {};
           if (profile.displayName) user["username"] = profile.displayName;
           if (profile.id) user["facebookId"] = profile.id;
-          if (profile.emails[0].value) user["email"] = profile.emails[0].value;
-          if (profile.photos[0].value) user["avatar"] = profile.photos[0].value;
-          new User(user).save().then(newUser => {
-            done(null, newUser);
-          });
+          if (profile.emails) user["email"] = profile.emails[0].value;
+          if (profile.photos) user["avatar"] = profile.photos[0].value;
+          new User(user)
+            .save()
+            .then(newUser => {
+              done(null, newUser);
+            })
+            .catch(err => {
+              console.log(err, profile);
+            });
         }
       });
     }
