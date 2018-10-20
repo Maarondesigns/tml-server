@@ -27,8 +27,8 @@ app.use("/auth", authRoutes);
 
 //allow cross origin requests
 const whitelist = [
-  "https://d9hu6u8b2wnsv.cloudfront.net/",
-  "https://toomanylists.com/"
+  "https://d9hu6u8b2wnsv.cloudfront.net",
+  "https://toomanylists.com"
 ];
 app.use(
   cors({
@@ -58,7 +58,7 @@ mongoose.connection.once("open", () => {
 
 const authCheck = (req, res, next) => {
   if (!req.user) {
-    res.redirect("https://toomanylists.com/");
+    res.redirect("https://toomanylists.com");
   } else {
     next();
   }
