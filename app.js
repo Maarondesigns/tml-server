@@ -26,11 +26,10 @@ app.use(passport.session());
 app.use("/auth", authRoutes);
 
 //allow cross origin requests
-const whitelist =
-  "https://d9hu6u8b2wnsv.cloudfront.net" || "https://toomanylists.com";
+
 app.use(
   cors({
-    origin: whitelist,
+    origin: "https://toomanylists.com",
     credentials: true
   })
 );
