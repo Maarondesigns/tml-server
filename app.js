@@ -26,19 +26,11 @@ app.use(passport.session());
 app.use("/auth", authRoutes);
 
 //allow cross origin requests
-const whitelist = [
-  "https://d9hu6u8b2wnsv.cloudfront.net",
-  "https://toomanylists.com"
-];
+const whitelist =
+  "https://d9hu6u8b2wnsv.cloudfront.net" || "https://toomanylists.com";
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (whitelist.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: whitelist,
     credentials: true
   })
 );
