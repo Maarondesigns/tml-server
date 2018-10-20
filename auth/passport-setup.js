@@ -27,16 +27,14 @@ passport.use(
         if (currentUser) {
           done(null, currentUser);
         } else {
-          new User({
-            username: profile.displayName,
-            googleId: profile.id,
-            email: profile.emails[0].value,
-            avatar: profile.photos[0].value
-          })
-            .save()
-            .then(newUser => {
-              done(null, newUser);
-            });
+          let user = {};
+          if (profile.displayName) user["username"] = profile.displayName;
+          if (profile.id) user["facebookId"] = profile.id;
+          if (profile.emails[0].value) user["email"] = profile.emails[0].value;
+          if (profile.photos[0].value) user["avatar"] = profile.photos[0].value;
+          new User(user).save().then(newUser => {
+            done(null, newUser);
+          });
         }
       });
     }
@@ -57,16 +55,14 @@ passport.use(
         if (currentUser) {
           done(null, currentUser);
         } else {
-          new User({
-            username: profile.displayName,
-            facebookId: profile.id,
-            email: profile.emails[0].value,
-            avatar: profile.photos[0].value
-          })
-            .save()
-            .then(newUser => {
-              done(null, newUser);
-            });
+          let user = {};
+          if (profile.displayName) user["username"] = profile.displayName;
+          if (profile.id) user["facebookId"] = profile.id;
+          if (profile.emails[0].value) user["email"] = profile.emails[0].value;
+          if (profile.photos[0].value) user["avatar"] = profile.photos[0].value;
+          new User(user).save().then(newUser => {
+            done(null, newUser);
+          });
         }
       });
     }
