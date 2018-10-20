@@ -56,6 +56,7 @@ passport.use(
       profileFields: ["id", "email", "displayName", "photos"]
     },
     (accessToken, refreshToken, profile, done) => {
+      console.log(profile);
       User.findOne({ facebookId: profile.id }).then(currentUser => {
         if (currentUser) {
           done(null, currentUser);
