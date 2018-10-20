@@ -1,4 +1,4 @@
-//require("dotenv").config();
+//require("dotenv").config(); //FOR TESTING PURPOSES____________________________
 const express = require("express");
 const graphqlHTTP = require("express-graphql");
 const schema = require("./schema/schema");
@@ -26,12 +26,30 @@ app.use(passport.session());
 app.use("/auth", authRoutes);
 
 //allow cross origin requests
+const whitelist = [
+  "https://d9hu6u8b2wnsv.cloudfront.net/",
+  "https://toomanylists.com/"
+];
 app.use(
   cors({
-    origin: "https://ilikelists.com.s3-website.us-east-2.amazonaws.com",
+    origin: (origin, callback) => {
+      if (whitelist.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true
   })
 );
+// FOR TESTING PURPOSES____________________________
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000",
+//     credentials: true
+//   })
+// );
+//FOR TESTING PURPOSES____________________________
 
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.once("open", () => {
@@ -40,12 +58,20 @@ mongoose.connection.once("open", () => {
 
 const authCheck = (req, res, next) => {
   if (!req.user) {
-    res.redirect("https://ilikelists.com.s3-website.us-east-2.amazonaws.com");
+    res.redirect("https://toomanylists.com/");
   } else {
     next();
   }
 };
-
+//FOR TESTING PURPOSES____________________________
+// const authCheck = (req, res, next) => {
+//   if (!req.user) {
+//     res.redirect("http://localhost:3000");
+//   } else {
+//     next();
+//   }
+// };
+//FOR TESTING PURPOSES____________________________
 app.use(
   "/graphql",
   authCheck,
