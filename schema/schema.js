@@ -358,7 +358,6 @@ const Mutation = new GraphQLObjectType({
           instructions: args.instructions,
           ingredients: args.ingredients
         });
-        console.log(recipe);
         return recipe.save();
       }
     },

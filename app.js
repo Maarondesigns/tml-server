@@ -62,7 +62,7 @@ const authCheck = (req, res, next) => {
 //     next();
 //   }
 // };
-//FOR TESTING PURPOSES____________________________
+//FOR TESTING PURPOSES___________________________
 app.use(
   "/graphql",
   authCheck,
