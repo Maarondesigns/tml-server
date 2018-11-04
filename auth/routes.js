@@ -1,5 +1,25 @@
 const router = require("express").Router();
 const passport = require("passport");
+var parser = require("body-parser");
+var jsonParser = parser.json();
+
+//local login
+router.post(
+  "/login",
+  jsonParser,
+  passport.authenticate("user-login"),
+  (req, res) => {
+    res.send(req.user);
+  }
+);
+router.post(
+  "/register",
+  jsonParser,
+  passport.authenticate("new-user"),
+  (req, res) => {
+    res.send(req.user);
+  }
+);
 
 //google login
 router.get(
@@ -12,6 +32,8 @@ router.get(
 //callback route for google to redirect to
 router.get("/google/redirect", passport.authenticate("google"), (req, res) => {
   res.redirect("https://toomanylists.com/");
+  //FOR TESTING PURPOSES____________________________
+  // res.redirect("http://localhost:3000");
 });
 
 //facebook login
@@ -23,34 +45,18 @@ router.get(
   passport.authenticate("facebook"),
   (req, res) => {
     res.redirect("https://toomanylists.com/");
+    //FOR TESTING PURPOSES____________________________
+    // res.redirect("http://localhost:3000");
   }
 );
 
 //auth logout
 router.get("/logout", (req, res) => {
   req.logout();
+  res.send("successfully logged out");
   res.redirect("https://toomanylists.com/");
+  //FOR TESTING PURPOSES____________________________
+  // res.redirect("http://localhost:3000");
 });
-
-//FOR TESTING PURPOSES____________________________
-// router.get("/google/redirect", passport.authenticate("google"), (req, res) => {
-//   res.redirect("http://localhost:3000");
-// });
-
-// router.get("/facebook", passport.authenticate("facebook"));
-
-// router.get(
-//   "/facebook/redirect",
-//   passport.authenticate("facebook"),
-//   (req, res) => {
-//     res.redirect("http://localhost:3000");
-//   }
-// );
-
-// router.get("/logout", (req, res) => {
-//   req.logout();
-//   res.redirect("http://localhost:3000");
-// });
-//FOR TESTING PURPOSES____________________________
 
 module.exports = router;

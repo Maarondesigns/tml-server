@@ -7,6 +7,9 @@ const Grocery = require("../models/grocery");
 const Recipe = require("../models/recipe");
 const User = require("../models/user");
 
+var bcrypt = require("bcryptjs");
+var salt = bcrypt.genSaltSync(10);
+
 const {
   GraphQLObjectType,
   GraphQLString,
@@ -25,6 +28,7 @@ const UserType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     username: { type: GraphQLString },
+    password: { type: GraphQLString },
     googleId: { type: GraphQLString },
     facebookId: { type: GraphQLString },
     email: { type: GraphQLString },
@@ -108,9 +112,21 @@ const RootQuery = new GraphQLObjectType({
   fields: {
     user: {
       type: UserType,
-      args: { id: { type: GraphQLID } },
+      args: {
+        id: { type: GraphQLID },
+        email: { type: GraphQLString },
+        username: { type: GraphQLString }
+      },
       resolve(parent, args, req) {
-        return User.findById(req.user.id);
+        if (req.user.id) {
+          return User.findById(req.user.id);
+        } else {
+          let user = {};
+          if (args.id) user["_id"] = args.id;
+          if (args.email) user["email"] = args.email;
+          if (args.username) user["username"] = args.username;
+          return User.findOne(user);
+        }
       }
     },
     book: {
@@ -220,21 +236,36 @@ const Mutation = new GraphQLObjectType({
         return book.save();
       }
     },
-    updateBook: {
-      type: BookType,
+    updateUser: {
+      type: UserType,
       args: {
         id: { type: GraphQLID },
-        name: { type: GraphQLString },
-        genre: { type: new GraphQLList(GraphQLString) },
-        completed: { type: GraphQLBoolean }
+        password: { type: GraphQLString },
+        hash: { type: GraphQLString },
+        new_pass: { type: GraphQLString },
+        username: { type: GraphQLString },
+        email: { type: GraphQLString },
+        googleId: { type: GraphQLString },
+        facebookId: { type: GraphQLString },
+        avatar: { type: GraphQLString }
       },
       resolve(parent, args, req) {
-        let book = {};
-        if (args.name) book["name"] = args.name;
-        if (args.genre) book["genre"] = args.genre;
-        if (args.completed || args.completed === false)
-          book["completed"] = args.completed;
-        return Book.findOneAndUpdate({ _id: args.id }, book);
+        let noPassword;
+        if (args.googleId) noPassword=args.googleId;
+        if (args.facebookId) noPassword=args.facebookId;
+        if (
+          bcrypt.compareSync(args.password, args.hash) ||
+          args.hash === noPassword
+        ) {
+          let update = {};
+          if (args.new_pass) update["password"] = bcrypt.hashSync(args.new_pass, salt);
+          if (args.username) update["username"] = args.username;
+          if (args.email) update["email"] = args.email;
+          if (args.avatar) update["avatar"] = args.avatar;
+          return User.findOneAndUpdate({ _id: args.id }, update);
+        } else {
+          return;
+        }
       }
     },
     removeBook: {

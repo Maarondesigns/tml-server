@@ -1,4 +1,4 @@
-//require("dotenv").config(); //FOR TESTING PURPOSES____________________________
+// require("dotenv").config(); //FOR TESTING PURPOSES____________________________
 const express = require("express");
 const graphqlHTTP = require("express-graphql");
 const schema = require("./schema/schema");
@@ -8,7 +8,7 @@ const authRoutes = require("./auth/routes");
 require("./auth/passport-setup");
 const passport = require("passport");
 const cookieSession = require("cookie-session");
-
+const flash = require("connect-flash");
 const app = express();
 
 app.use(
@@ -22,25 +22,20 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-//set up routes
-app.use("/auth", authRoutes);
+app.use(flash());
 
 //allow cross origin requests
 
 app.use(
   cors({
     origin: "https://toomanylists.com",
+    // origin: "http://localhost:3000",
     credentials: true
   })
 );
-// FOR TESTING PURPOSES____________________________
-// app.use(
-//   cors({
-//     origin: "http://localhost:3000",
-//     credentials: true
-//   })
-// );
-//FOR TESTING PURPOSES____________________________
+
+//set up routes
+app.use("/auth", authRoutes);
 
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.once("open", () => {
@@ -50,19 +45,12 @@ mongoose.connection.once("open", () => {
 const authCheck = (req, res, next) => {
   if (!req.user) {
     res.redirect("https://toomanylists.com");
+    // res.redirect("http://localhost:3000");
   } else {
     next();
   }
 };
-//FOR TESTING PURPOSES____________________________
-// const authCheck = (req, res, next) => {
-//   if (!req.user) {
-//     res.redirect("http://localhost:3000");
-//   } else {
-//     next();
-//   }
-// };
-//FOR TESTING PURPOSES___________________________
+
 app.use(
   "/graphql",
   authCheck,
