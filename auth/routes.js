@@ -32,8 +32,7 @@ router.get(
 //callback route for google to redirect to
 router.get("/google/redirect", passport.authenticate("google"), (req, res) => {
   res.redirect("https://toomanylists.com/");
-  //FOR TESTING PURPOSES____________________________
-  // res.redirect("http://localhost:3000");
+  // res.redirect("http://192.168.0.8:3000");
 });
 
 //facebook login
@@ -45,18 +44,14 @@ router.get(
   passport.authenticate("facebook"),
   (req, res) => {
     res.redirect("https://toomanylists.com/");
-    //FOR TESTING PURPOSES____________________________
-    // res.redirect("http://localhost:3000");
+    // res.redirect("http://192.168.0.8:3000");
   }
 );
 
 //auth logout
 router.get("/logout", (req, res) => {
   req.logout();
-  res.send("successfully logged out");
-  res.redirect("https://toomanylists.com/");
-  //FOR TESTING PURPOSES____________________________
-  // res.redirect("http://localhost:3000");
+  res.sendStatus(200);
 });
 
 module.exports = router;

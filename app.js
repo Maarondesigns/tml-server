@@ -1,4 +1,4 @@
-// require("dotenv").config(); //FOR TESTING PURPOSES____________________________
+//require("dotenv").config(); //FOR TESTING PURPOSES____________________________
 const express = require("express");
 const graphqlHTTP = require("express-graphql");
 const schema = require("./schema/schema");
@@ -29,7 +29,7 @@ app.use(flash());
 app.use(
   cors({
     origin: "https://toomanylists.com",
-    // origin: "http://localhost:3000",
+    // origin: "http://192.168.0.8:3000",
     credentials: true
   })
 );
@@ -45,7 +45,7 @@ mongoose.connection.once("open", () => {
 const authCheck = (req, res, next) => {
   if (!req.user) {
     res.redirect("https://toomanylists.com");
-    // res.redirect("http://localhost:3000");
+    // res.redirect("http://192.168.0.8:3000");
   } else {
     next();
   }
