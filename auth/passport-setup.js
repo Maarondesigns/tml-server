@@ -30,6 +30,7 @@ passport.use(
         findUser = { username: username };
       }
       User.findOne(findUser, function(err, user) {
+        console.log(user);
         if (err) {
           return done(err);
         }
