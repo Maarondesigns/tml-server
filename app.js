@@ -1,4 +1,4 @@
-require("dotenv").config(); //FOR TESTING PURPOSES____________________________
+//require("dotenv").config(); //FOR TESTING PURPOSES____________________________
 const express = require("express");
 const graphqlHTTP = require("express-graphql");
 const schema = require("./schema/schema");
