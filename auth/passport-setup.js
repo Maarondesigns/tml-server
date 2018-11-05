@@ -35,9 +35,6 @@ passport.use(
           return done(err);
         }
         if (!user) {
-          // req.flash("messages", { error: "Incorrect username." });
-          // res.locals.messages = req.flash();
-
           return done(null, false, { message: "Incorrect username." });
         }
         if (!user.password) {
@@ -67,7 +64,7 @@ passport.use(
         findUser = { username: username };
       }
       User.findOne(findUser, function(err, user) {
-        console.log(user);
+        req.flash();
         if (err) {
           return done(err);
         }
@@ -77,12 +74,9 @@ passport.use(
           new User(findUser)
             .save()
             .then(newUser => {
-              console.log(newUser);
-              done(null, newUser);
+              done(null, newUser, { message: "Successful Login!" });
             })
-            .catch(err => {
-              console.log(err);
-            });
+            .catch(err => {});
         } else {
           return done(null, false, { message: "User already exists." });
         }
@@ -94,7 +88,7 @@ passport.use(
 passport.use(
   new GoogleStrategy(
     {
-      // callbackURL: "http://localhost:4000/auth/google/redirect",
+      // callbackURL: "http://192.168.0.8:4000/auth/google/redirect",
       callbackURL:
         "https://mikes-reading-list.herokuapp.com/auth/google/redirect",
       clientID: process.env.GOOGLE_CLIENID,
@@ -129,9 +123,9 @@ passport.use(
     {
       clientID: process.env.FACEBOOK_APP_ID,
       clientSecret: process.env.FACEBOOK_APP_SECRET,
-      // callbackURL: "http://localhost:4000/auth/facebook/redirect",
-      callbackURL:
-        "https://mikes-reading-list.herokuapp.com/auth/facebook/redirect",
+      callbackURL: "http://192.168.0.8:4000/auth/facebook/redirect",
+      // callbackURL:
+      //   "https://mikes-reading-list.herokuapp.com/auth/facebook/redirect",
       profileFields: ["id", "email", "displayName", "photos"]
     },
     (accessToken, refreshToken, profile, done) => {

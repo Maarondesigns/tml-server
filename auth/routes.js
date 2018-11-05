@@ -4,24 +4,40 @@ var parser = require("body-parser");
 var jsonParser = parser.json();
 
 //local login
-router.post(
-  "/login",
-  jsonParser,
-  passport.authenticate("user-login", { failureFlash: true }),
-  (req, res) => {
-    console.log(res);
-    // console.log(req.flash('user', req.user));
-    res.sendStatus(200);
-  }
-);
-router.post(
-  "/register",
-  jsonParser,
-  passport.authenticate("new-user"),
-  (req, res) => {
-    res.send(req.user);
-  }
-);
+router.post("/login", jsonParser, (req, res, next) => {
+  passport.authenticate("user-login", (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.status(401).send(JSON.stringify(info));
+    }
+    req.logIn(user, function(err) {
+      if (err) {
+        return next(err);
+      }
+      return res.status(200).send(JSON.stringify(info));
+    });
+  })(req, res, next);
+});
+
+//local new user login
+router.post("/register", jsonParser, (req, res, next) => {
+  passport.authenticate("new-user", (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.status(401).send(JSON.stringify(info));
+    }
+    req.logIn(user, function(err) {
+      if (err) {
+        return next(err);
+      }
+      return res.status(200).send(JSON.stringify(info));
+    });
+  })(req, res, next);
+});
 
 //google login
 router.get(
@@ -34,7 +50,7 @@ router.get(
 //callback route for google to redirect to
 router.get("/google/redirect", passport.authenticate("google"), (req, res) => {
   res.redirect("https://toomanylists.com/");
-  // res.redirect("http://localhost:3000");
+  // res.redirect("http://192.168.0.8:3000");
 });
 
 //facebook login
@@ -46,7 +62,7 @@ router.get(
   passport.authenticate("facebook"),
   (req, res) => {
     res.redirect("https://toomanylists.com/");
-    // res.redirect("http://localhost:3000");
+    // res.redirect("http://192.168.0.8:3000");
   }
 );
 

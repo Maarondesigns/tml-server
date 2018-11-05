@@ -1,4 +1,4 @@
-// require("dotenv").config(); //FOR TESTING PURPOSES____________________________
+require("dotenv").config(); //FOR TESTING PURPOSES____________________________
 const express = require("express");
 const graphqlHTTP = require("express-graphql");
 const schema = require("./schema/schema");
@@ -28,7 +28,7 @@ app.use(flash());
 const whitelist = [
   "https://toomanylists.com",
   "https://www.toomanylists.com"
-  // "http://localhost:3000"
+  // "http://192.168.0.8:3000"
 ];
 app.use(
   cors({
@@ -55,7 +55,7 @@ mongoose.connection.once("open", () => {
 const authCheck = (req, res, next) => {
   if (!req.user) {
     res.redirect("https://toomanylists.com");
-    // res.redirect("http://localhost.8:3000");
+    // res.redirect("http://192.168.0.8.8:3000");
   } else {
     next();
   }
