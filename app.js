@@ -27,7 +27,9 @@ app.use(flash());
 //allow cross origin requests
 const whitelist = [
   "https://toomanylists.com",
-  "https://www.toomanylists.com"
+  "https://www.toomanylists.com",
+  "https://d9hu6u8b2wnsv.cloudfront.net/",
+  "http://toomanylists.com.s3-website-us-east-1.amazonaws.com/"
   // "http://192.168.0.8:3000"
 ];
 app.use(
