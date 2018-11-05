@@ -7,8 +7,9 @@ var jsonParser = parser.json();
 router.post(
   "/login",
   jsonParser,
-  passport.authenticate("user-login"),
+  passport.authenticate("user-login", { failureFlash: true }),
   (req, res) => {
+    console.log(res);
     // console.log(req.flash('user', req.user));
     res.sendStatus(200);
   }

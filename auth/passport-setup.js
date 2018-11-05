@@ -30,14 +30,19 @@ passport.use(
         findUser = { username: username };
       }
       User.findOne(findUser, function(err, user) {
-        console.log(user);
         if (err) {
           return done(err);
         }
         if (!user) {
+          // req.flash("messages", { error: "Incorrect username." });
+          // res.locals.messages = req.flash();
           return done(null, false, { message: "Incorrect username." });
         }
-
+        if (!user.password) {
+          return done(null, false, {
+            message: "No password set. Please use social login."
+          });
+        }
         if (bcrypt.compareSync(password, user.password)) {
           return done(null, user);
         }
