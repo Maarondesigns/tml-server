@@ -25,10 +25,16 @@ app.use(passport.session());
 app.use(flash());
 
 //allow cross origin requests
-
+const whitelist = ["https://toomanylists.com", "https://www.toomanylists.com"];
 app.use(
   cors({
-    origin: "https://toomanylists.com",
+    origin: (origin, callback) => {
+      if (whitelist.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     // origin: "http://192.168.0.8:3000",
     credentials: true
   })
