@@ -14,8 +14,7 @@ const app = express();
 app.use(
   cookieSession({
     maxAge: 24 * 60 * 60 * 1000 * 30,
-    keys: [process.env.COOKIE_KEY],
-    secure: false
+    keys: [process.env.COOKIE_KEY]
   })
 );
 
@@ -46,7 +45,7 @@ app.use(
     credentials: true
   })
 );
-
+app.options("*", cors());
 //set up routes
 app.use("/auth", authRoutes);
 
