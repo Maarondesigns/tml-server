@@ -7,16 +7,46 @@ const cors = require("cors");
 const authRoutes = require("./auth/routes");
 require("./auth/passport-setup");
 const passport = require("passport");
-const cookieSession = require("cookie-session");
+// const cookieSession = require("cookie-session");
+const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
 const flash = require("connect-flash");
+
 const app = express();
 
+const store = new MongoDBStore({
+  uri: process.env.MONGODB_URI,
+  collection: "sessions"
+});
+
+store.on("connected", function() {
+  store.client; // The underlying MongoClient object from the MongoDB driver
+});
+
+// Catch errors
+store.on("error", function(error) {
+  assert.ifError(error);
+  assert.ok(false);
+});
+
 app.use(
-  cookieSession({
-    maxAge: 24 * 60 * 60 * 1000,
-    keys: [process.env.COOKIE_KEY]
+  session({
+    secret: process.env.COOKIE_KEY,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+      secure: true
+    },
+    store: store,
+    resave: true,
+    saveUninitialized: true
   })
 );
+// app.use(
+//   cookieSession({
+//     maxAge: 24 * 60 * 60 * 1000,
+//     keys: [process.env.COOKIE_KEY]
+//   })
+// );
 
 //initialize passport
 app.use(passport.initialize());
