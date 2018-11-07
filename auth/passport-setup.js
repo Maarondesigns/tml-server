@@ -123,9 +123,9 @@ passport.use(
     {
       clientID: process.env.FACEBOOK_APP_ID,
       clientSecret: process.env.FACEBOOK_APP_SECRET,
-      callbackURL: "http://192.168.0.8:4000/auth/facebook/redirect",
-      // callbackURL:
-      //   "https://mikes-reading-list.herokuapp.com/auth/facebook/redirect",
+      // callbackURL: "http://192.168.0.8:4000/auth/facebook/redirect",
+      callbackURL:
+        "https://mikes-reading-list.herokuapp.com/auth/facebook/redirect",
       profileFields: ["id", "email", "displayName", "photos"]
     },
     (accessToken, refreshToken, profile, done) => {
