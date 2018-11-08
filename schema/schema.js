@@ -236,6 +236,23 @@ const Mutation = new GraphQLObjectType({
         return book.save();
       }
     },
+    updateBook: {
+      type: BookType,
+      args: {
+        id: { type: GraphQLID },
+        name: { type: GraphQLString },
+        genre: { type: new GraphQLList(GraphQLString) },
+        completed: { type: GraphQLBoolean }
+      },
+      resolve(parent, args, req) {
+        let book = {};
+        if (args.name) book["name"] = args.name;
+        if (args.genre) book["genre"] = args.genre;
+        if (args.completed || args.completed === false)
+          book["completed"] = args.completed;
+        return Book.findOneAndUpdate({ _id: args.id }, book);
+      }
+    },
     updateUser: {
       type: UserType,
       args: {
@@ -251,14 +268,15 @@ const Mutation = new GraphQLObjectType({
       },
       resolve(parent, args, req) {
         let noPassword;
-        if (args.googleId) noPassword=args.googleId;
-        if (args.facebookId) noPassword=args.facebookId;
+        if (args.googleId) noPassword = args.googleId;
+        if (args.facebookId) noPassword = args.facebookId;
         if (
           bcrypt.compareSync(args.password, args.hash) ||
           args.hash === noPassword
         ) {
           let update = {};
-          if (args.new_pass) update["password"] = bcrypt.hashSync(args.new_pass, salt);
+          if (args.new_pass)
+            update["password"] = bcrypt.hashSync(args.new_pass, salt);
           if (args.username) update["username"] = args.username;
           if (args.email) update["email"] = args.email;
           if (args.avatar) update["avatar"] = args.avatar;
