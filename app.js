@@ -1,5 +1,6 @@
 //require("dotenv").config(); //FOR TESTING PURPOSES____________________________
 const express = require("express");
+const helmet = require("helmet");
 const graphqlHTTP = require("express-graphql");
 const schema = require("./schema/schema");
 const mongoose = require("mongoose");
@@ -10,6 +11,8 @@ const passport = require("passport");
 const cookieSession = require("cookie-session");
 const flash = require("connect-flash");
 const app = express();
+
+app.use(helmet());
 
 app.use(
   cookieSession({
