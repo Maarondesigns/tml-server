@@ -6,7 +6,8 @@ const bookSchema = new Schema({
   genre: Array,
   authorId: String,
   userId: String,
-  completed: Boolean
+  completed: Boolean,
+  order: Number
 });
 
 module.exports = mongoose.model("Book", bookSchema);

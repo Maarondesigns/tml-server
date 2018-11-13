@@ -50,7 +50,7 @@ router.get(
 //callback route for google to redirect to
 router.get("/google/redirect", passport.authenticate("google"), (req, res) => {
   res.redirect("https://toomanylists.com/");
-  // res.redirect("http://192.168.0.8:3000");
+  // res.redirect("http://localhost:3000");
 });
 
 //facebook login
@@ -62,7 +62,7 @@ router.get(
   passport.authenticate("facebook"),
   (req, res) => {
     res.redirect("https://toomanylists.com/");
-    // res.redirect("http://192.168.0.8:3000");
+    // res.redirect("http://localhost:3000");
   }
 );
 

@@ -6,7 +6,8 @@ const recipeSchema = new Schema({
   ingredients: Array,
   instructions: String,
   userId: String,
-  completed: Boolean
+  completed: Boolean,
+  order: Number
 });
 
 module.exports = mongoose.model("Recipe", recipeSchema);

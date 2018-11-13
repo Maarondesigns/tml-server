@@ -1,4 +1,4 @@
-//require("dotenv").config(); //FOR TESTING PURPOSES____________________________
+// require("dotenv").config(); //FOR TESTING PURPOSES____________________________
 const express = require("express");
 const helmet = require("helmet");
 const graphqlHTTP = require("express-graphql");
@@ -12,7 +12,14 @@ const cookieSession = require("cookie-session");
 const flash = require("connect-flash");
 const app = express();
 
+const twoYears = 63072000;
+
 app.use(helmet());
+app.use(
+  helmet.hsts({
+    maxAge: twoYears
+  })
+);
 
 app.use(
   cookieSession({
@@ -32,14 +39,12 @@ app.use(flash());
 const whitelist = [
   "https://toomanylists.com",
   "https://www.toomanylists.com",
-  "https://d9hu6u8b2wnsv.cloudfront.net",
-  "http://toomanylists.com.s3-website-us-east-1.amazonaws.com"
-  // "http://192.168.0.8:3000"
+  "https://d9hu6u8b2wnsv.cloudfront.net"
+  // "http://localhost:3000"
 ];
 app.use(
   cors({
     origin: (origin, callback) => {
-      console.log(origin);
       if (whitelist.indexOf(origin) !== -1 || !origin) {
         callback(null, true);
       } else {
@@ -61,7 +66,7 @@ mongoose.connection.once("open", () => {
 const authCheck = (req, res, next) => {
   if (!req.user) {
     res.redirect("https://toomanylists.com");
-    // res.redirect("http://192.168.0.8.8:3000");
+    // res.redirect("http://localhost:3000");
   } else {
     next();
   }

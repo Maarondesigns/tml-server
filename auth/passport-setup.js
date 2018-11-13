@@ -88,7 +88,7 @@ passport.use(
 passport.use(
   new GoogleStrategy(
     {
-      // callbackURL: "http://192.168.0.8:4000/auth/google/redirect",
+      // callbackURL: "http://localhost:4000/auth/google/redirect",
       callbackURL:
         "https://mikes-reading-list.herokuapp.com/auth/google/redirect",
       clientID: process.env.GOOGLE_CLIENID,
@@ -123,13 +123,12 @@ passport.use(
     {
       clientID: process.env.FACEBOOK_APP_ID,
       clientSecret: process.env.FACEBOOK_APP_SECRET,
-      // callbackURL: "http://192.168.0.8:4000/auth/facebook/redirect",
+      // callbackURL: "http://localhost:4000/auth/facebook/redirect",
       callbackURL:
         "https://mikes-reading-list.herokuapp.com/auth/facebook/redirect",
       profileFields: ["id", "email", "displayName", "photos"]
     },
     (accessToken, refreshToken, profile, done) => {
-      console.log(profile);
       User.findOne({ facebookId: profile.id }).then(currentUser => {
         if (currentUser) {
           done(null, currentUser);

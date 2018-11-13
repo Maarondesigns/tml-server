@@ -32,7 +32,9 @@ const UserType = new GraphQLObjectType({
     googleId: { type: GraphQLString },
     facebookId: { type: GraphQLString },
     email: { type: GraphQLString },
-    avatar: { type: GraphQLString }
+    avatar: { type: GraphQLString },
+    bio: { type: GraphQLString },
+    links: { type: new GraphQLList(GraphQLString) }
   })
 });
 
@@ -44,6 +46,7 @@ const BookType = new GraphQLObjectType({
     genre: { type: new GraphQLList(GraphQLString) },
     userId: { type: GraphQLString },
     completed: { type: GraphQLBoolean },
+    order: { type: GraphQLInt },
     author: {
       type: AuthorType,
       resolve(parent, args) {
@@ -89,7 +92,8 @@ const GroceryType = new GraphQLObjectType({
     name: { type: GraphQLString },
     quantity: { type: GraphQLString },
     userId: { type: GraphQLString },
-    completed: { type: GraphQLBoolean }
+    completed: { type: GraphQLBoolean },
+    order: { type: GraphQLInt }
   })
 });
 
@@ -101,7 +105,8 @@ const RecipeType = new GraphQLObjectType({
     instructions: { type: GraphQLString },
     ingredients: { type: new GraphQLList(GraphQLString) },
     userId: { type: GraphQLString },
-    completed: { type: GraphQLBoolean }
+    completed: { type: GraphQLBoolean },
+    order: { type: GraphQLInt }
   })
 });
 
@@ -242,12 +247,14 @@ const Mutation = new GraphQLObjectType({
         id: { type: GraphQLID },
         name: { type: GraphQLString },
         genre: { type: new GraphQLList(GraphQLString) },
-        completed: { type: GraphQLBoolean }
+        completed: { type: GraphQLBoolean },
+        order: { type: GraphQLInt }
       },
       resolve(parent, args, req) {
         let book = {};
         if (args.name) book["name"] = args.name;
         if (args.genre) book["genre"] = args.genre;
+        if (args.order) book["order"] = args.order;
         if (args.completed || args.completed === false)
           book["completed"] = args.completed;
         return Book.findOneAndUpdate({ _id: args.id }, book);
@@ -264,7 +271,9 @@ const Mutation = new GraphQLObjectType({
         email: { type: GraphQLString },
         googleId: { type: GraphQLString },
         facebookId: { type: GraphQLString },
-        avatar: { type: GraphQLString }
+        avatar: { type: GraphQLString },
+        bio: { type: GraphQLString },
+        links: { type: new GraphQLList(GraphQLString) }
       },
       resolve(parent, args, req) {
         let noPassword;
@@ -280,6 +289,8 @@ const Mutation = new GraphQLObjectType({
           if (args.username) update["username"] = args.username;
           if (args.email) update["email"] = args.email;
           if (args.avatar) update["avatar"] = args.avatar;
+          if (args.bio) update["bio"] = args.bio;
+          if (args.links) update["links"] = args.links;
           return User.findOneAndUpdate({ _id: args.id }, update);
         } else {
           return;
@@ -373,12 +384,14 @@ const Mutation = new GraphQLObjectType({
         id: { type: GraphQLID },
         name: { type: GraphQLString },
         quantity: { type: GraphQLString },
-        completed: { type: GraphQLBoolean }
+        completed: { type: GraphQLBoolean },
+        order: { type: GraphQLInt }
       },
       resolve(parent, args, req) {
         let grocery = {};
         if (args.name) grocery["name"] = args.name;
         if (args.quantity) grocery["quantity"] = args.quantity;
+        if (args.order) grocery["order"] = args.order;
         if (args.completed || args.completed === false)
           grocery["completed"] = args.completed;
 
@@ -417,13 +430,15 @@ const Mutation = new GraphQLObjectType({
         name: { type: GraphQLString },
         ingredients: { type: new GraphQLList(GraphQLString) },
         instructions: { type: GraphQLString },
-        completed: { type: GraphQLBoolean }
+        completed: { type: GraphQLBoolean },
+        order: { type: GraphQLInt }
       },
       resolve(parent, args, req) {
         let recipe = {};
         if (args.name) recipe["name"] = args.name;
         if (args.ingredients) recipe["ingredients"] = args.ingredients;
         if (args.instructions) recipe["instructions"] = args.instructions;
+        if (args.order) recipe["order"] = args.order;
         if (args.completed || args.completed === false)
           recipe["completed"] = args.completed;
 
